@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>PWA - getInstalledRelatedApps</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/web/style.css">
+    <meta name="theme-color" content="#3f51b5">
+    <link rel="manifest" href="/web/manifest.json">
+
+    <link http-equiv="origin-trial"
+        content="At3uhlLvIiUq7b2cW267B1XKvHohHGuxeCqF3FJB/0RaR6BUUC5iOWgfYjkaBwzInT33eAdoSEHpONIpM8h4BQAAAABieyJvcmlnaW4iOiJodHRwczovL2dldC1pbnN0YWxsZWQtYXBwcy5nbGl0Y2gubWU6NDQzIiwiZmVhdHVyZSI6Ikluc3RhbGxlZEFwcCIsImV4cGlyeSI6MTU3OTAyOTYxNn0=">
+</head>
+
+<body>
+    <h1>
+        getInstalledRelatedApps
+    </h1>
+
+    <p id="about">
+        The <a href="https://developers.google.com/web/updates/2018/12/get-installed-related-apps">
+            <code>getInstalledRelatedApps</code></a> API is a new web platform API
+        that allows your web app to check to see if your native app is installed
+        on the users device, and vice versa.
+    </p>
+    <div class="instructions">
+        <span class="instructionsCount">1</span>
+        <span>
+            Install <a href="https://play.google.com/store/apps/details?id=ca.bigbackpack.getinstalledrelatedapps">this
+                app</a>
+        </span>
+    </div>
+    <div class="instructions">
+        <span class="instructionsCount">2</span>
+        <span>
+            Come back to this page
+        </span>
+    </div>
+    <p>
+        This demo checks to see if a specific
+        <a href="https://play.google.com/store/apps/details?id=ca.bigbackpack.getinstalledrelatedapps">demo app</a> is
+        installed
+        from the Google Play Store. Only when it is installed will you see it
+        listed below. Try installing it to see how <code>getInstalledRelatedApps</code>
+        works when the expected app is installed.
+    </p>
+
+    <p>
+        Check out the <a href="https://glitch.com/edit/#!/get-installed-apps">source</a>
+        for this sample, or
+        <a href="https://glitch.com/edit/#!/remix/get-installed-apps">remix it</a>
+        on Glitch.
+    </p>
+
+    <p id="requireHTTPS" class="hidden">
+        <b>STOP!</b> This page <b>must</b> be served over HTTPS.
+        Please <a>reload this page via HTTPS</a>.
+    </p>
+
+    <p id="notSupported">
+        <b>Sorry!</b> This browser doesn't support the <code>getInstalledRelatedApps</code>.
+        The API is only available as an origin trial in Chrome 73+ on Android.
+    </p>
+
+    <div>
+        <b>Installed Apps:</b> <span id="status"></span>
+        <ul id="installedApps">
+        </ul>
+    </div>
+
+    <script>
+        /**
+         * Warn the page must be served over HTTPS
+         * The `beforeinstallprompt` event won't fire if the page is served over HTTP.
+         * Installability requires a service worker with a fetch event handler, and
+         * if the page isn't served over HTTPS, the service worker won't load.
+         */
+        if (window.location.protocol === 'http:') {
+            const requireHTTPS = document.getElementById('requireHTTPS');
+            const link = requireHTTPS.querySelector('a');
+            link.href = window.location.href.replace('http://', 'https://');
+            requireHTTPS.classList.remove('hidden');
+            window.location.href = 'https:' + window.location.href.substring(5);
+        }
+
+        const status = document.getElementById('status');
+        const ul = document.getElementById('installedApps');
+
+        window.addEventListener('load', () => {
+            // Check to see if the API is supported.
+            if ('getInstalledRelatedApps' in navigator) {
+                const divNotSupported = document.getElementById('notSupported');
+                divNotSupported.classList.toggle('hidden', true);
+
+                setTimeout(() => { checkForRelatedApps() }, 1000)
+            }
+        });
+
+        function checkForRelatedApps() {
+            navigator.getInstalledRelatedApps().then((relatedApps) => {
+                console.log(" relatedApps", relatedApps)
+                status.textContent = `resolved (${relatedApps.length})`;
+                relatedApps.forEach((app) => {
+                    const lines = [];
+                    lines.push(`<b>id:</b> <code>${app.id}</code>`);
+                    lines.push(`<b>platform:</b> ${app.platform}`);
+                    lines.push(`<b>url:</b> <a href="${app.url}">${app.url}</a>`);
+                    const li = document.createElement('li');
+                    li.innerHTML = lines.join('<br>');
+                    ul.appendChild(li);
+                });
+            });
+        }
+    </script>
+
+</body>
+
+</html>

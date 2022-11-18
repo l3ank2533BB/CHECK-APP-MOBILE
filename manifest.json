@@ -1,0 +1,16 @@
+{
+    "name": "getInstalled",
+    "short_name": "getInst",
+    "scope": "/",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#e8eaf6",
+    "theme_color": "#3f51b5",
+    "related_applications": [
+        {
+            "platform": "play",
+            "url": "https://play.google.com/store/apps/details?id=com.matteljv.uno",
+            "id": "com.matteljv.uno"
+        }
+    ]
+}
