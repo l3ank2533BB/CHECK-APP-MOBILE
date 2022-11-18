@@ -98,20 +98,31 @@
             }
         });
 
-        function checkForRelatedApps() {
-            navigator.getInstalledRelatedApps().then((relatedApps) => {
-                console.log(" relatedApps", relatedApps)
-                status.textContent = `resolved (${relatedApps.length})`;
-                relatedApps.forEach((app) => {
-                    const lines = [];
-                    lines.push(`<b>id:</b> <code>${app.id}</code>`);
-                    lines.push(`<b>platform:</b> ${app.platform}`);
-                    lines.push(`<b>url:</b> <a href="${app.url}">${app.url}</a>`);
-                    const li = document.createElement('li');
-                    li.innerHTML = lines.join('<br>');
-                    ul.appendChild(li);
-                });
-            });
+        async function checkForRelatedApps() {
+            const listOfInstalledApps = await navigator.getInstalledRelatedApps();
+            console.log("listOfInstalledApps", listOfInstalledApps)
+            for (const app of listOfInstalledApps) {
+                // These fields are specified by the Web App Manifest spec.
+                console.log('platform:', app.platform);
+                console.log('url:', app.url);
+                console.log('id:', app.id);
+
+                // This field is provided by the UA.
+                console.log('version:', app.version);
+            }
+            // navigator.getInstalledRelatedApps().then((relatedApps) => {
+            //     console.log(" relatedApps", relatedApps)
+            //     status.textContent = `resolved (${relatedApps.length})`;
+            //     relatedApps.forEach((app) => {
+            //         const lines = [];
+            //         lines.push(`<b>id:</b> <code>${app.id}</code>`);
+            //         lines.push(`<b>platform:</b> ${app.platform}`);
+            //         lines.push(`<b>url:</b> <a href="${app.url}">${app.url}</a>`);
+            //         const li = document.createElement('li');
+            //         li.innerHTML = lines.join('<br>');
+            //         ul.appendChild(li);
+            //     });
+            // });
         }
     </script>
 
