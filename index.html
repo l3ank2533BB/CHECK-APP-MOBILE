@@ -101,6 +101,7 @@
         async function checkForRelatedApps() {
             const listOfInstalledApps = await navigator.getInstalledRelatedApps();
             console.log("listOfInstalledApps", listOfInstalledApps)
+            alert("listOfInstalledApps", listOfInstalledApps)
             for (const app of listOfInstalledApps) {
                 // These fields are specified by the Web App Manifest spec.
                 console.log('platform:', app.platform);
